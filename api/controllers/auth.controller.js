@@ -15,7 +15,7 @@ try{
 }
 
 };
-export const signin = async (rreq, rec, next) => {
+export const signin = async (req, res, next) => {
     const {email, password} = req.body;
     try{ 
 const validUser = await user.findOne({email});
