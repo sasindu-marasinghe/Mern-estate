@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 
 
 export default function SignUp() {
   const [formData, setFormData ] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleChange = (e) =>{
     setFormData(
       {
@@ -15,6 +16,8 @@ export default function SignUp() {
   };
   const handleSubmit = async(e) => {
     e.preventDefault();
+    try{
+      setLoading(true);
       const res = await fetch('/api/auth/signup',
       {
         method:'POST',
@@ -25,8 +28,22 @@ export default function SignUp() {
       });
       const data = await res.json();
       console.log(data);
+      if(data.success === false){
+        setLoading(false);
+        setError(data.message);
+       
+        return;
+      }
+      setLoading(false);
+      setError(null);
+      navigate('/sign-in');
+    }catch(error){
+          setLoading(false);
+          setError(error.message);
+
+    }
+   
     };
-    console.log(formData);
   
 
   return (
@@ -46,9 +63,9 @@ export default function SignUp() {
         className='border p-3 rounded-lg' id='password'
         onChange={handleChange}
        />
-        <button className='bg-slate-700 text-white p-3
+        <button disabled={loading}className='bg-slate-700 text-white p-3
         rounded-lg uppercase hover:opacity-95
-        disabled:opacity-80'>Sign up</button>
+        disabled:opacity-80'>{loading ? 'loading...': 'Sign Up'}</button>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
