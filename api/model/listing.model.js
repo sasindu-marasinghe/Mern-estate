@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+//import Listing from './listing.model.js';
+
 
 const listingSchema = new mongoose.Schema(
     {
