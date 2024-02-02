@@ -3,7 +3,6 @@ import { useEffect, useRef ,useState} from 'react';
 import {getDownloadURL, getStorage,ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from "../redux/user/firebase";
 import { updateUserStart,updateUserSuccess,updateUserFailure } from "../redux/user/userSlice";
-import {  } from "react-redux";
 
 
 export default function Profile() {
@@ -13,6 +12,7 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError,setFileUploadError] =useState(false);
   const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(fales);
   const dispatch = useDispatch();
 
 
@@ -74,9 +74,10 @@ const handleSubmit = async(e) => {
       return;
     }
     dispatch(updateUserSuccess(data));
+    setUpdateSuccess(true);
   } catch (error) {
     dispatch(updateUserFailure(error.message));
-  }
+  };
 
 }
   return (
@@ -115,6 +116,8 @@ const handleSubmit = async(e) => {
         Account</span>
         <span className='text-red-700 cursor-pointer'>Sign Out</span>
       </div>
+      <p className='text-red-700 mt-5'>{error ? error:''}</p>
+      <p className='text-green-700 mt-5'>{updateSuccess ? 'user is updated success ': ''}</p>
     </div>
-  )
-}
+  );
+};
